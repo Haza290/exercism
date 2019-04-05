@@ -1,38 +1,27 @@
 -module(isogram).
 -export([is_isogram/1]).
 -import(string,[to_lower/1]).
--include_lib("eunit/include/eunit.hrl").
 
 is_isogram(Word) ->
 	 is_isogram(string:to_lower(Word), []).
 is_isogram([], _) ->
 	true;
-is_isogram([H|T], Letters) ->
-	DoesOccur = occurs(H, Letters),
-	if
-		DoesOccur ->
-			false;
-		true ->
-			is_isogram(T, [H|Letters])
-	end.
+is_isogram([H|T], Letters) when is_in_alphabet(H) -> 
+	is_isogram(T, Letters);
+is_isogram([H|T], Letters) when occurs(H, Letters) ->
+	is_isogram(T, [H|Letters]);
+is_isogram(_, _) -> false.
 
 occurs(_, []) ->
 	false;
-occurs(X, [X|_]) ->
+occurs(Character, [Character|_]) ->
 	true;
-occurs(X, [_|T]) ->
-	occurs(X, T).
+occurs(Character, [_|T]) ->
+	occurs(Character, T).
 
-is_in_alphabet(Charater) ->
+is_in_alphabet(Character) ->
 	Alphabet = "abcdefghijklmnopqrstuvwxyz",
 	is_in_alphabet(Letter, Alphabet).
 is_in_alphabet(_, []) -> false;
-is_in_alphabet(Charater, [Charater|T]) -> true;
-is_in_alphabet(Charater, [_|T]) -> is_in_alphabet(Charater, T).
-
-occurs_possitive_test() -> true = occurs("d", ["d","o"]).
-occurs_negative_test() -> false = occurs("do", ["T", "s"]).
-
-is_isogram_possitive_test() -> true = is_isogram("yes").
-is_isogram_negative_test() -> false = is_isogram("test").
-is_isogram_case_test() -> false = is_isogram("Test").
+is_in_alphabet(Character, [Character|T]) -> true;
+is_in_alphabet(Character, [_|T]) -> is_in_alphabet(Character, T).
