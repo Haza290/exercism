@@ -9,7 +9,7 @@ factors(X) ->
 factors(X, X, PrimeFactors) ->
     [X|PrimeFactors];
 factors(X, PrimeNumber, PrimeFactors) when X rem PrimeNumber == 0 ->
-    factors(X/PrimeNumber, PrimeNumber, [PrimeNumber|PrimeFactors]);
+    factors(trunc(X/PrimeNumber), PrimeNumber, [PrimeNumber | PrimeFactors]);
 factors(X, PrimeNumber, PrimeFactors) ->
     factors(X, next_prime(PrimeNumber), PrimeFactors).
 
